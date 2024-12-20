@@ -1,0 +1,15 @@
+Django
+djangorestframework
+djangorestframework-simplejwt
+PyJWT
+bcrypt
+mysqlclient
+python-dotenv
+cryptography
+tenacity
+django-cors-headers
+PyMySQL
+python-dotenv
+requests
+celery
+redis

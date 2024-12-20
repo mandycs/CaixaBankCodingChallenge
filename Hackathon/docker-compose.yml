@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+      - smtp
+      - redis  # Añadir dependencia de Redis
+    env_file: 
+      - .env
+    command: >
+      sh -c "/wait-for-it.sh mysql:3306 -t 30 -- python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    networks:
+      - finservice_network
+    restart: always
+
+  celery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A bankingapp worker --loglevel=info  # Comando para ejecutar el worker de Celery
+    depends_on:
+      - redis
+      - mysql
+    env_file:
+      - .env
+    networks:
+      - finservice_network
+    restart: always
+
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: celery -A bankingapp beat --loglevel=info  # Comando para ejecutar Celery Beat
+    depends_on:
+      - redis
+      - mysql
+    env_file:
+      - .env
+    networks:
+      - finservice_network
+    restart: always
+
+  redis:
+    image: redis:6.0
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - finservice_network
+    restart: always
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: bankingapp
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    networks:
+      - finservice_network
+    restart: always
+
+  smtp:
+    image: mailhog/mailhog
+    container_name: smtp
+    ports:
+      - "1025:1025"  # MailHog SMTP port
+      - "8025:8025"  # Interfaz web de MailHog
+    networks:
+      - finservice_network
+    restart: always
+
+networks:
+  finservice_network:
+    driver: bridge
