@@ -12,8 +12,6 @@ La variedad de desafíos abarca desde ejercicios introductorios hasta propuestas
 
 - **/Retos**:  
   Cada subdirectorio de esta carpeta corresponde a un desafío específico.  
-  - **/Reto-1**, **/Reto-2**, etc.: En estos directorios se incluyen las descripciones detalladas de cada reto, las instrucciones para su resolución, así como el código fuente y posibles soluciones propuestas. En muchos casos se incluye un archivo `Dockerfile` y, en ocasiones, un `docker-compose.yml` que facilitan la ejecución del entorno completo.
-
 - **/Documentación**:  
   Este directorio reúne información de referencia, guías de estilo, enlaces a fuentes externas, así como otros recursos que pueden ser de utilidad para comprender el contexto, las metodologías propuestas o los enfoques alternativos de solución.
 
